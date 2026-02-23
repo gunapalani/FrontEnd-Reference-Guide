@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+  <div class="min-h-screen" style="background: linear-gradient(to bottom right, #1f1472, #37147d, #53199e);">
+    <!-- Navigation -->
+    <nav class="bg-black/20 backdrop-blur-md sticky top-0 z-50 border-b border-white/10">
+      <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <a href="/" class="text-white text-2xl font-bold">Interview Prep</a>
+        <a href="/" class="text-gray-300 hover:text-white transition">← Back</a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-6xl mx-auto px-6 py-12">
+      <div class="mb-12">
+        <h1 class="text-5xl font-bold text-white mb-4">JavaScript</h1>
+        <p class="text-gray-300 text-lg">JavaScript fundamentals, ES6+, and advanced concepts</p>
+      </div>
+
+      <!-- Interview Questions Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white/10 border border-white/20 rounded-lg p-6 hover:bg-white/20 transition backdrop-blur-sm">
+          <h3 class="text-xl font-semibold text-white mb-3">Question 1</h3>
+          <p class="text-gray-300">Add your JavaScript interview questions here</p>
+        </div>
+
+        <div class="bg-white/10 border border-white/20 rounded-lg p-6 hover:bg-white/20 transition backdrop-blur-sm">
+          <h3 class="text-xl font-semibold text-white mb-3">Question 2</h3>
+          <p class="text-gray-300">Add your JavaScript interview questions here</p>
+        </div>
+
+        <div class="bg-white/10 border border-white/20 rounded-lg p-6 hover:bg-white/20 transition backdrop-blur-sm">
+          <h3 class="text-xl font-semibold text-white mb-3">Question 3</h3>
+          <p class="text-gray-300">Add your JavaScript interview questions here</p>
+        </div>
+
+        <div class="bg-white/10 border border-white/20 rounded-lg p-6 hover:bg-white/20 transition backdrop-blur-sm">
+          <h3 class="text-xl font-semibold text-white mb-3">Question 4</h3>
+          <p class="text-gray-300">Add your JavaScript interview questions here</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

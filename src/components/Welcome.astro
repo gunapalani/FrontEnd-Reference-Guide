@@ -1,210 +1,161 @@
 ---
-import astroLogo from '../assets/astro.svg';
-import background from '../assets/background.svg';
+const topics = [
+  {
+    title: "HTML",
+    href: "/html",
+    description:
+      "Master HTML fundamentals including semantic markup, accessibility, forms, and best practices for modern web development.",
+    icon: "/html.png",
+    questions: 48,
+  },
+  {
+    title: "CSS & Tailwind",
+    href: "/css-tailwind-scss",
+    description:
+      "Explore CSS fundamentals, Tailwind CSS utility framework, SCSS preprocessing, animations, and responsive design techniques.",
+    icon: "/css.png",
+    questions: 52,
+  },
+  {
+    title: "JavaScript",
+    href: "/javascript",
+    description:
+      "Learn JavaScript fundamentals, ES6+ features, async/await, closures, prototypes, and advanced programming patterns.",
+    icon: "/js.webp",
+    questions: 58,
+  },
+  {
+    title: "DOM",
+    href: "/dom",
+    description:
+      "Master Document Object Model manipulation, event handling, element traversal, and dynamic content modification techniques.",
+    icon: "/dom.webp",
+    questions: 42,
+  },
+  {
+    title: "Angular",
+    href: "/angular",
+    description:
+      "Learn Angular framework including components, services, dependency injection, RxJS, routing, and reactive forms development.",
+    icon: "/angular.png",
+    questions: 55,
+  },
+  {
+    title: "React",
+    href: "/react",
+    description:
+      "Master React including hooks, state management, component lifecycle, context API, performance optimization, and best practices.",
+    icon: "/react.webp",
+    questions: 61,
+  },
+];
+
+const totalQuestions = topics.reduce((sum, topic) => sum + topic.questions, 0);
 ---
 
-<div id="container">
-	<img id="background" src={background.src} alt="" fetchpriority="high" />
-	<main>
-		<section id="hero">
-			<a href="https://astro.build"
-				><img src={astroLogo.src} width="115" height="48" alt="Astro Homepage" /></a
-			>
-			<h1>
-				To get started, open the <code><pre>src/pages</pre></code> directory in your project.
-			</h1>
-			<section id="links">
-				<a class="button" href="https://docs.astro.build">Read our docs</a>
-				<a href="https://astro.build/chat"
-					>Join our Discord <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36"
-						><path
-							fill="currentColor"
-							d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69Zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69Z"
-						></path></svg
-					>
-				</a>
-			</section>
-		</section>
-	</main>
-
-	<a href="https://astro.build/blog/astro-5/" id="news" class="box">
-		<svg width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg"
-			><path
-				d="M24.667 12c1.333 1.414 2 3.192 2 5.334 0 4.62-4.934 5.7-7.334 12C18.444 28.567 18 27.456 18 26c0-4.642 6.667-7.053 6.667-14Zm-5.334-5.333c1.6 1.65 2.4 3.43 2.4 5.333 0 6.602-8.06 7.59-6.4 17.334C13.111 27.787 12 25.564 12 22.666c0-4.434 7.333-8 7.333-16Zm-6-5.333C15.111 3.555 16 5.556 16 7.333c0 8.333-11.333 10.962-5.333 22-3.488-.774-6-4-6-8 0-8.667 8.666-10 8.666-20Z"
-				fill="#111827"></path></svg
-		>
-		<h2>What's New in Astro 5.0?</h2>
-		<p>
-			From content layers to server islands, click to learn more about the new features and
-			improvements in Astro 5.0
-		</p>
-	</a>
-</div>
-
 <style>
-	#background {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
-		filter: blur(100px);
-	}
+  @keyframes glowPulse {
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(255, 20, 147, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(255, 20, 147, 0.5);
+    }
+  }
 
-	#container {
-		font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
-		height: 100%;
-	}
-
-	main {
-		height: 100%;
-		display: flex;
-		justify-content: center;
-	}
-
-	#hero {
-		display: flex;
-		align-items: start;
-		flex-direction: column;
-		justify-content: center;
-		padding: 16px;
-	}
-
-	h1 {
-		font-size: 22px;
-		margin-top: 0.25em;
-	}
-
-	#links {
-		display: flex;
-		gap: 16px;
-	}
-
-	#links a {
-		display: flex;
-		align-items: center;
-		padding: 10px 12px;
-		color: #111827;
-		text-decoration: none;
-		transition: color 0.2s;
-	}
-
-	#links a:hover {
-		color: rgb(78, 80, 86);
-	}
-
-	#links a svg {
-		height: 1em;
-		margin-left: 8px;
-	}
-
-	#links a.button {
-		color: white;
-		background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
-		box-shadow:
-			inset 0 0 0 1px rgba(255, 255, 255, 0.12),
-			inset 0 -2px 0 rgba(0, 0, 0, 0.24);
-		border-radius: 10px;
-	}
-
-	#links a.button:hover {
-		color: rgb(230, 230, 230);
-		box-shadow: none;
-	}
-
-	pre {
-		font-family:
-			ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono',
-			monospace;
-		font-weight: normal;
-		background: linear-gradient(14deg, #d83333 0%, #f041ff 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		margin: 0;
-	}
-
-	h2 {
-		margin: 0 0 1em;
-		font-weight: normal;
-		color: #111827;
-		font-size: 20px;
-	}
-
-	p {
-		color: #4b5563;
-		font-size: 16px;
-		line-height: 24px;
-		letter-spacing: -0.006em;
-		margin: 0;
-	}
-
-	code {
-		display: inline-block;
-		background:
-			linear-gradient(66.77deg, #f3cddd 0%, #f5cee7 100%) padding-box,
-			linear-gradient(155deg, #d83333 0%, #f041ff 18%, #f5cee7 45%) border-box;
-		border-radius: 8px;
-		border: 1px solid transparent;
-		padding: 6px 8px;
-	}
-
-	.box {
-		padding: 16px;
-		background: rgba(255, 255, 255, 1);
-		border-radius: 16px;
-		border: 1px solid white;
-	}
-
-	#news {
-		position: absolute;
-		bottom: 16px;
-		right: 16px;
-		max-width: 300px;
-		text-decoration: none;
-		transition: background 0.2s;
-		backdrop-filter: blur(50px);
-	}
-
-	#news:hover {
-		background: rgba(255, 255, 255, 0.55);
-	}
-
-	@media screen and (max-height: 368px) {
-		#news {
-			display: none;
-		}
-	}
-
-	@media screen and (max-width: 768px) {
-		#container {
-			display: flex;
-			flex-direction: column;
-		}
-
-		#hero {
-			display: block;
-			padding-top: 10%;
-		}
-
-		#links {
-			flex-wrap: wrap;
-		}
-
-		#links a.button {
-			padding: 14px 18px;
-		}
-
-		#news {
-			right: 16px;
-			left: 16px;
-			bottom: 2.5rem;
-			max-width: 100%;
-		}
-
-		h1 {
-			line-height: 1.5;
-		}
-	}
+  .card-hover:hover {
+    animation: glowPulse 0.6s ease-in-out;
+  }
 </style>
+
+<div
+  class="min-h-screen font-sans"
+  style="background: linear-gradient(to bottom right, #1f1472, #37147d, #53199e); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;"
+>
+  <!-- Navigation -->
+  <nav class="bg-black/20 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-center">
+      <h2 class="text-white text-2xl font-bold">Frontend Interview Prep</h2>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="max-w-6xl mx-auto px-6 py-20">
+    <div class="text-center mb-12">
+      <h1 class="text-6xl font-bold mb-4 text-white">
+        Frontend Developer Reference Guide
+      </h1>
+      <p class="text-gray-300 text-lg max-w-3xl mx-auto">
+        A comprehensive guide to master frontend development concepts. Learn key
+        concepts in HTML, CSS, Tailwind, JavaScript, DOM, Angular, React, and
+        more.
+      </p>
+    </div>
+
+    <!-- Tabs/Buttons -->
+    <div class="flex justify-center gap-6 mb-16 flex-wrap">
+      <span
+        class="px-6 py-2 rounded-full border-2 border-pink-500 text-pink-400 font-semibold"
+      >
+        {totalQuestions}+ Questions
+      </span>
+      <span
+        class="px-6 py-2 rounded-full border-2 border-pink-500 text-pink-400 font-semibold"
+      >
+        Code Examples
+      </span>
+      <span
+        class="px-6 py-2 rounded-full border-2 border-pink-500 text-pink-400 font-semibold"
+      >
+        Quick Reference
+      </span>
+    </div>
+
+    <!-- Topics Grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+      {
+        topics.map((topic) => (
+          <a href={topic.href} class="group block">
+            <div class="h-full bg-white/90 backdrop-blur-sm rounded-xl p-6 border border-pink-100 hover:border-pink-300 transition-all duration-300 hover:transform hover:scale-105 shadow-sm hover:shadow-lg">
+              <div class="flex items-start justify-between mb-4">
+                <div class="w-14 h-14 rounded-lg flex items-center justify-center">
+                  <img
+                    src={topic.icon}
+                    alt={topic.title}
+                    class="w-10 h-10 object-contain"
+                  />
+                </div>
+                <span class="px-2 py-1 bg-pink-100 text-pink-600 text-xs font-medium rounded-full">
+                  {topic.questions} Q&A
+                </span>
+              </div>
+              <h2 class="text-xl font-semibold text-gray-900 mb-3 group-hover:text-pink-600 transition-colors">
+                {topic.title}
+              </h2>
+              <p class="text-gray-500 text-sm leading-relaxed">
+                {topic.description}
+              </p>
+              <div class="mt-4 flex items-center text-pink-600 text-sm font-medium">
+                <span>Learn more</span>
+                <svg
+                  class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </div>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</div>
