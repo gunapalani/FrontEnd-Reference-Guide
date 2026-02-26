@@ -1,45 +1,300 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+
+const topics = [
+  {
+    title: "Angular Fundamentals",
+    questions: [
+      {
+        q: "What is Angular?",
+        a: "<b><u>Angular</u></b> is a <b>TypeScript-based, open-source front-end framework</b> developed by Google. It is used to build <u>Single Page Applications (SPAs)</u>.<br/><br/>Key features:<br/>• <u>Component-based architecture</u><br/>• <u>Two-way data binding</u><br/>• <u>Dependency Injection</u><br/>• <u>Routing</u><br/>• <u>Reactive Forms</u><br/>• <u>RxJS</u> for async programming",
+      },
+      {
+        q: "What is the difference between AngularJS and Angular?",
+        a: '<b><u>AngularJS (v1)</u></b> vs <b><u>Angular (v2+)</u></b>:<br/><br/><b>AngularJS:</b> JavaScript-based, uses $scope, MVC pattern, no CLI.<br/><b>Angular:</b> TypeScript-based, component-based, CLI support, better performance with Ivy.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// AngularJS (v1)\napp.controller("MyCtrl", function($scope) {\n  $scope.name = "Hello";\n});\n\n// Angular (v2+)\n@Component({ selector: "app-root", template: "{{name}}" })\nexport class AppComponent {\n  name = "Hello";\n}</code></pre>',
+      },
+      {
+        q: "What is a Module in Angular?",
+        a: '<b><u>NgModule</u></b> is a container that groups related components, directives, pipes, and services. Every Angular app has at least one root module: <b>AppModule</b>.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>@NgModule({\n  declarations: [AppComponent, HomeComponent],  // Components/Directives/Pipes\n  imports: [BrowserModule, FormsModule],         // Other modules\n  providers: [UserService],                      // Services\n  bootstrap: [AppComponent]                      // Root component\n})\nexport class AppModule { }</code></pre>',
+      },
+      {
+        q: "What is the Angular compilation process? JIT vs AOT?",
+        a: '<b><u>JIT (Just-In-Time)</u></b> → Compiled in the <u>browser at runtime</u>. Used in development mode.<br/><b><u>AOT (Ahead-Of-Time)</u></b> → Compiled at <u>build time</u>. Used in production. Faster rendering, smaller bundle, detects template errors early.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// JIT (dev)\nng serve\n\n// AOT (prod)\nng build --configuration production\n// Angular 9+ uses Ivy + AOT by default</code></pre>',
+      },
+      {
+        q: "What is the Angular CLI?",
+        a: '<b><u>Angular CLI</u></b> (Command Line Interface) is a tool to <u>create, develop, and maintain</u> Angular apps.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>npm install -g @angular/cli\n\nng new my-app              // Create new project\nng serve                   // Start dev server\nng generate component home // Generate component\nng generate service user   // Generate service\nng build --prod            // Production build\nng test                    // Run unit tests\nng lint                    // Lint code</code></pre>',
+      },
+      {
+        q: "What is Ivy in Angular?",
+        a: "<b><u>Ivy</u></b> is Angular's default <u>rendering engine</u> introduced in Angular 9. It replaces the older View Engine.<br/><br/>Benefits of Ivy:<br/>• <u>Smaller bundle sizes</u> (tree-shaking friendly)<br/>• <u>Faster compilation</u><br/>• <u>Better debugging</u><br/>• <u>Lazy loading improvements</u><br/>• <u>Incremental DOM</u> approach instead of virtual DOM",
+      },
+    ],
+  },
+  {
+    title: "Components & Templates",
+    questions: [
+      {
+        q: "What is a Component in Angular?",
+        a: '<b><u>Component</u></b> is the basic building block of an Angular app. It controls a part of the UI via a template.<br/><br/>A component has 3 parts:<br/>• <b>Class</b> (logic) — TypeScript file<br/>• <b>Template</b> (view) — HTML file<br/>• <b>Styles</b> — CSS/SCSS file<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>@Component({\n  selector: "app-home",           // HTML tag used in templates\n  templateUrl: "./home.component.html",\n  styleUrls: ["./home.component.scss"]\n})\nexport class HomeComponent {\n  title = "Welcome to Angular";\n  count = 0;\n\n  increment() {\n    this.count++;\n  }\n}</code></pre>',
+      },
+      {
+        q: "What is Data Binding in Angular?",
+        a: '<b><u>Data Binding</u></b> is the synchronization of data between component and template. Angular supports 4 types:<br/><br/><b>1. Interpolation</b> {{ }} — Component → Template (one-way)<br/><b>2. Property Binding</b> [ ] — Component → Template (one-way)<br/><b>3. Event Binding</b> ( ) — Template → Component (one-way)<br/><b>4. Two-way Binding</b> [( )] — Both directions using ngModel<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// 1. Interpolation\n<h1>{{ title }}</h1>\n\n// 2. Property Binding\n<img [src]="imageUrl" />\n<button [disabled]="isLoading">Submit</button>\n\n// 3. Event Binding\n<button (click)="save()">Save</button>\n<input (input)="onInput($event)" />\n\n// 4. Two-way Binding\n<input [(ngModel)]="username" />\n// Requires FormsModule</code></pre>',
+      },
+      {
+        q: "What are @Input() and @Output() decorators?",
+        a: '<b><u>@Input()</u></b> → Passes data <u>from parent to child</u> component.<br/><b><u>@Output()</u></b> → Emits events <u>from child to parent</u> using EventEmitter.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Child Component\n@Component({ selector: "app-card", template: `\n  <div>{{ title }}</div>\n  <button (click)="onDelete()">Delete</button>\n`})\nexport class CardComponent {\n  @Input() title: string = "";              // Receives from parent\n  @Output() deleted = new EventEmitter();   // Emits to parent\n\n  onDelete() {\n    this.deleted.emit(this.title);\n  }\n}\n\n// Parent Template\n<app-card\n  [title]="item.name"\n  (deleted)="handleDelete($event)">\n</app-card></code></pre>',
+      },
+      {
+        q: "What is ViewChild and ContentChild?",
+        a: '<b><u>@ViewChild</u></b> → Accesses a <u>child component/element in the same template</u>.<br/><b><u>@ContentChild</u></b> → Accesses a <u>projected child (via ng-content)</u>.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>@Component({\n  template: `<app-child #childRef></app-child>`\n})\nexport class ParentComponent implements AfterViewInit {\n  @ViewChild("childRef") child!: ChildComponent;\n\n  ngAfterViewInit() {\n    this.child.doSomething();  // Call child method\n  }\n}</code></pre>',
+      },
+      {
+        q: "What is ng-content (Content Projection)?",
+        a: '<b><u>ng-content</u></b> allows a component to <u>accept and project external HTML</u> into its template — similar to slots in Web Components.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Card Component Template\n<div class="card">\n  <div class="header">\n    <ng-content select="[card-header]"></ng-content>\n  </div>\n  <div class="body">\n    <ng-content></ng-content>  <!-- Default slot -->\n  </div>\n</div>\n\n// Usage in parent\n<app-card>\n  <h2 card-header>My Title</h2>\n  <p>Card body content</p>\n</app-card></code></pre>',
+      },
+      {
+        q: "What are Component Lifecycle Hooks?",
+        a: '<b><u>Lifecycle hooks</u></b> let you tap into key moments of a component\'s life:<br/><br/><b>ngOnChanges</b> → Called when <u>@Input() values change</u><br/><b>ngOnInit</b> → Called once after <u>first ngOnChanges</u> (use for initialization)<br/><b>ngDoCheck</b> → Called during <u>every change detection run</u><br/><b>ngAfterContentInit</b> → After <u>ng-content projected</u><br/><b>ngAfterViewInit</b> → After <u>component view initialized</u><br/><b>ngOnDestroy</b> → Before <u>component is destroyed</u> (cleanup)<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>export class MyComponent implements OnInit, OnDestroy {\n  private sub!: Subscription;\n\n  ngOnInit() {\n    // Initialization logic — fetch data, subscribe\n    this.sub = this.userService.getUsers().subscribe();\n  }\n\n  ngOnChanges(changes: SimpleChanges) {\n    console.log("Input changed:", changes);\n  }\n\n  ngOnDestroy() {\n    // Cleanup — unsubscribe to avoid memory leaks\n    this.sub.unsubscribe();\n  }\n}</code></pre>',
+      },
+      {
+        q: "What is the complete Angular Component Lifecycle?",
+        a: '<b><u>Angular Lifecycle</u></b> — the sequence of hooks from component creation to destruction:<br/><br/><img src="/angular/lifecycle.png" alt="Angular Lifecycle" class="mt-2 mb-4 rounded-lg border border-gray-200 max-w-full" onerror="this.style.display=\'none\'" /><br/><b>1. constructor</b> → Class instantiated (DI happens here)<br/><b>2. ngOnChanges</b> → @Input() bindings set/changed<br/><b>3. ngOnInit</b> → Component initialized (fetch data here) ⭐<br/><b>4. ngDoCheck</b> → Every change detection cycle<br/><b>5. ngAfterContentInit</b> → ng-content projected<br/><b>6. ngAfterContentChecked</b> → After projected content checked<br/><b>7. ngAfterViewInit</b> → Component + child views initialized ⭐<br/><b>8. ngAfterViewChecked</b> → After view checked<br/><b>9. ngOnDestroy</b> → Before component destroyed (cleanup here) ⭐<br/><br/><b>Most used:</b> ngOnInit (setup), ngOnChanges (react to inputs), ngOnDestroy (cleanup), ngAfterViewInit (DOM access)',
+      },
+      {
+        q: "What is Change Detection in Angular?",
+        a: '<b><u>Change Detection</u></b> is Angular\'s mechanism to <u>sync the component state with the DOM</u>. Angular checks the entire component tree by default (<b>Default strategy</b>).<br/><br/><b><u>ChangeDetectionStrategy.OnPush</u></b> → Only checks when <u>@Input() reference changes</u> or an event fires. Better performance.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>@Component({\n  selector: "app-user",\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  template: `<p>{{ user.name }}</p>`\n})\nexport class UserComponent {\n  @Input() user!: User;  // Only re-renders when user reference changes\n}\n\n// Force check manually if needed\nconstructor(private cdr: ChangeDetectorRef) {}\n\nmanualUpdate() {\n  this.cdr.markForCheck();  // Schedule check\n  // or\n  this.cdr.detectChanges(); // Run check immediately\n}</code></pre>',
+      },
+    ],
+  },
+  {
+    title: "Directives & Pipes",
+    questions: [
+      {
+        q: "What are Directives in Angular?",
+        a: "<b><u>Directives</u></b> are instructions to the DOM. Angular has 3 types:<br/><br/><b>1. Component Directives</b> → Components with a template (most common)<br/><b>2. Structural Directives</b> → Change DOM layout by adding/removing elements (*ngIf, *ngFor, *ngSwitch)<br/><b>3. Attribute Directives</b> → Change appearance/behavior of an element (ngClass, ngStyle, custom)",
+      },
+      {
+        q: "What are Structural Directives?",
+        a: '<b><u>Structural Directives</u></b> modify the DOM structure using the <b>*</b> prefix (syntactic sugar for ng-template).<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// *ngIf\n<div *ngIf="isLoggedIn; else loginBlock">\n  Welcome back!\n</div>\n<ng-template #loginBlock><p>Please login</p></ng-template>\n\n// *ngFor\n<ul>\n  <li *ngFor="let user of users; let i = index; trackBy: trackById">\n    {{ i + 1 }}. {{ user.name }}\n  </li>\n</ul>\n\n// *ngSwitch\n<div [ngSwitch]="status">\n  <p *ngSwitchCase="\'active\'">Active</p>\n  <p *ngSwitchCase="\'inactive\'">Inactive</p>\n  <p *ngSwitchDefault>Unknown</p>\n</div></code></pre>',
+      },
+      {
+        q: "What are Attribute Directives? How to build a custom one?",
+        a: '<b><u>Attribute Directives</u></b> change the appearance/behavior of an element without adding/removing it.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Built-in\n<div [ngClass]="{ \'active\': isActive, \'disabled\': !isEnabled }">Text</div>\n<div [ngStyle]="{ color: textColor, fontSize: size + \'px\' }">Text</div>\n\n// Custom Attribute Directive\n@Directive({\n  selector: "[appHighlight]"\n})\nexport class HighlightDirective {\n  @Input() appHighlight = "yellow";\n\n  constructor(private el: ElementRef, private renderer: Renderer2) {}\n\n  @HostListener("mouseenter") onMouseEnter() {\n    this.renderer.setStyle(this.el.nativeElement, "backgroundColor", this.appHighlight);\n  }\n\n  @HostListener("mouseleave") onMouseLeave() {\n    this.renderer.removeStyle(this.el.nativeElement, "backgroundColor");\n  }\n}\n\n// Usage\n<p [appHighlight]="\'lightblue\'">Hover over me!</p></code></pre>',
+      },
+      {
+        q: "What are Pipes in Angular?",
+        a: '<b><u>Pipes</u></b> transform data in templates. Angular provides built-in pipes and supports creating custom ones.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Built-in pipes\n{{ name | uppercase }}             // JOHN\n{{ name | lowercase }}             // john\n{{ price | currency:\'USD\' }}       // $1,234.56\n{{ date | date:\'dd/MM/yyyy\' }}     // 25/02/2026\n{{ data | json }}                  // JSON string\n{{ longText | slice:0:50 }}        // First 50 chars\n{{ items | async }}                // Unwrap Observable/Promise\n\n// Custom Pipe\n@Pipe({ name: "truncate" })\nexport class TruncatePipe implements PipeTransform {\n  transform(value: string, limit: number = 50): string {\n    return value.length > limit ? value.slice(0, limit) + "..." : value;\n  }\n}\n\n// Usage\n{{ description | truncate:100 }}</code></pre>',
+      },
+      {
+        q: "What is the async pipe and why is it preferred?",
+        a: '<b><u>async pipe</u></b> automatically <u>subscribes to an Observable/Promise</u> and <u>unsubscribes on component destroy</u> — preventing memory leaks.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Without async pipe - manual subscription (memory leak risk)\nexport class AppComponent implements OnInit, OnDestroy {\n  users: User[] = [];\n  private sub!: Subscription;\n\n  ngOnInit() { this.sub = this.userSvc.getUsers().subscribe(u => this.users = u); }\n  ngOnDestroy() { this.sub.unsubscribe(); }\n}\n<li *ngFor="let u of users">{{ u.name }}</li>\n\n// With async pipe - cleaner, auto-unsubscription\nexport class AppComponent {\n  users$ = this.userService.getUsers();  // Observable\n  constructor(private userService: UserService) {}\n}\n<li *ngFor="let u of users$ | async">{{ u.name }}</li></code></pre>',
+      },
+      {
+        q: "What are Pure and Impure Pipes?",
+        a: '<b><u>Pure Pipe</u></b> → Executes <u>only when input reference changes</u>. Angular caches the result. Default behavior. Better performance.<br/><br/><b><u>Impure Pipe</u></b> → Executes on <u>every change detection cycle</u>. Use when pipe depends on external state or mutable data.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Pure Pipe (default) — only runs when \'items\' reference changes\n@Pipe({ name: "filterActive", pure: true })  // pure: true is default\nexport class FilterActivePipe implements PipeTransform {\n  transform(items: Item[]): Item[] {\n    return items.filter(i => i.active);\n  }\n}\n// Problem: Won\'t update if you mutate array (items.push())\n// Solution: Create new array reference: this.items = [...this.items, newItem]\n\n// Impure Pipe — runs on EVERY change detection\n@Pipe({ name: "filterActive", pure: false })\nexport class FilterActivePipe implements PipeTransform {\n  transform(items: Item[]): Item[] {\n    return items.filter(i => i.active);\n  }\n}\n// Updates even with mutations, but can impact performance\n\n// When to use impure pipes:\n// • Pipe depends on external service/state\n// • Input is mutable and you can\'t change to immutable patterns\n// • Filtering arrays that get mutated</code></pre>',
+      },
+    ],
+  },
+  {
+    title: "Services & Dependency Injection",
+    questions: [
+      {
+        q: "What is a Service in Angular?",
+        a: '<b><u>Service</u></b> is a class with a focused purpose — handling <u>business logic, data fetching, or shared state</u>. Services are <u>injected into components</u>, not created directly.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>@Injectable({\n  providedIn: "root"  // Singleton across the entire app\n})\nexport class UserService {\n  private users: User[] = [];\n\n  getUsers(): User[] {\n    return this.users;\n  }\n\n  addUser(user: User): void {\n    this.users.push(user);\n  }\n}</code></pre>',
+      },
+      {
+        q: "What is Dependency Injection (DI) in Angular?",
+        a: '<b><u>Dependency Injection</u></b> is a design pattern where a class <u>receives its dependencies from outside</u> rather than creating them. Angular\'s DI system provides dependencies via constructors.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Without DI (tightly coupled - bad)\nexport class OrderComponent {\n  private userService = new UserService();  // Creates its own instance\n}\n\n// With DI (loosely coupled - good)\nexport class OrderComponent {\n  constructor(private userService: UserService) {}  // Angular injects it\n\n  loadUser() {\n    this.userService.getUsers();\n  }\n}\n\n// Angular DI hierarchy\n// Root level   → providedIn: "root" (singleton)\n// Module level → providers: [UserService] in NgModule\n// Component    → providers: [UserService] in @Component (new instance per component)</code></pre>',
+      },
+      {
+        q: "What are the different ways to provide a service?",
+        a: '<b>1. <u>Root level</u></b> (singleton) — recommended for shared services:<br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>@Injectable({ providedIn: "root" })\nexport class AuthService {}</code></pre><br/><b>2. <u>Module level</u></b> — scoped to feature module:<br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>@NgModule({ providers: [OrderService] })\nexport class OrderModule {}</code></pre><br/><b>3. <u>Component level</u></b> — new instance per component:<br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>@Component({ providers: [LocalStateService] })\nexport class CartComponent {}</code></pre>',
+      },
+    ],
+  },
+  {
+    title: "Routing & Navigation",
+    questions: [
+      {
+        q: "How does Routing work in Angular?",
+        a: '<b><u>Angular Router</u></b> maps URL paths to components. It uses <b>RouterModule</b> and the router-outlet directive as a placeholder for rendered components.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// app-routing.module.ts\nconst routes: Routes = [\n  { path: "",            component: HomeComponent },\n  { path: "about",       component: AboutComponent },\n  { path: "user/:id",    component: UserDetailComponent },\n  { path: "admin",       component: AdminComponent, canActivate: [AuthGuard] },\n  { path: "**",          redirectTo: "" }  // Wildcard\n];\n\n@NgModule({\n  imports: [RouterModule.forRoot(routes)],\n  exports: [RouterModule]\n})\nexport class AppRoutingModule {}\n\n// app.component.html\n<nav>\n  <a routerLink="/">Home</a>\n  <a routerLink="/about" routerLinkActive="active">About</a>\n</nav>\n<router-outlet></router-outlet>  <!-- Rendered component goes here --></code></pre>',
+      },
+      {
+        q: "What is Lazy Loading in Angular?",
+        a: '<b><u>Lazy Loading</u></b> loads feature modules <u>only when the route is visited</u>, reducing the initial bundle size.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// app-routing.module.ts\nconst routes: Routes = [\n  { path: "home", component: HomeComponent },\n  {\n    path: "admin",\n    loadChildren: () =>\n      import("./admin/admin.module").then(m => m.AdminModule)  // Lazy loaded\n  },\n  {\n    path: "shop",\n    loadComponent: () =>\n      import("./shop/shop.component").then(c => c.ShopComponent) // Standalone lazy\n  }\n];\n\n// Angular 16: Standalone components support direct lazy loading via loadComponent</code></pre>',
+      },
+      {
+        q: "What are Route Guards?",
+        a: '<b><u>Route Guards</u></b> control <u>navigation access</u> — protecting routes from unauthorized users.<br/><br/>Types: <b>canActivate</b>, <b>canDeactivate</b>, <b>canLoad</b>, <b>canActivateChild</b>, <b>resolve</b><br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Auth Guard\n@Injectable({ providedIn: "root" })\nexport class AuthGuard implements CanActivate {\n  constructor(private authService: AuthService, private router: Router) {}\n\n  canActivate(): boolean | UrlTree {\n    if (this.authService.isLoggedIn()) {\n      return true;\n    }\n    return this.router.createUrlTree(["/login"]); // Redirect\n  }\n}\n\n// Angular 16+: Functional guards (no class needed)\nexport const authGuard: CanActivateFn = (route, state) => {\n  const auth = inject(AuthService);\n  const router = inject(Router);\n  return auth.isLoggedIn() ? true : router.createUrlTree(["/login"]);\n};\n\n// Route config\n{ path: "dashboard", component: DashboardComponent, canActivate: [authGuard] }</code></pre>',
+      },
+      {
+        q: "How do you pass and read Route Parameters?",
+        a: '<b><u>Route parameters</u></b> pass dynamic values via the URL. Use <b>ActivatedRoute</b> to read them.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Route definition\n{ path: "user/:id", component: UserComponent }\n\n// Navigate with params\nthis.router.navigate(["/user", userId]);\n// or in template\n<a [routerLink]="[\'/user\', user.id]">View</a>\n\n// Read params in component\nexport class UserComponent implements OnInit {\n  constructor(private route: ActivatedRoute) {}\n\n  ngOnInit() {\n    // Snapshot (static)\n    const id = this.route.snapshot.paramMap.get("id");\n\n    // Observable (dynamic - reuse same component)\n    this.route.paramMap.subscribe(params => {\n      const id = params.get("id");\n      this.loadUser(id);\n    });\n\n    // Query params: /user?tab=info\n    this.route.queryParamMap.subscribe(params => {\n      const tab = params.get("tab");\n    });\n  }\n}</code></pre>',
+      },
+    ],
+  },
+  {
+    title: "Forms",
+    questions: [
+      {
+        q: "What are the two types of forms in Angular?",
+        a: "<b><u>Template-Driven Forms</u></b> → Form logic in the <u>HTML template</u>. Simple forms, uses ngModel. Asynchronous.<br/><b><u>Reactive Forms</u></b> → Form logic in the <u>component class</u>. Scalable, more control, synchronous, testable.<br/><br/><b>When to use what?</b><br/>• Simple forms → Template-driven<br/>• Complex validation, dynamic fields, unit testing → Reactive",
+      },
+      {
+        q: "How do Template-Driven Forms work?",
+        a: '<b><u>Template-Driven Forms</u></b> use directives like <b>ngModel</b>, <b>ngForm</b>, and <b>ngSubmit</b> in the template.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Import FormsModule in AppModule\nimports: [FormsModule]\n\n// Template\n<form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">\n  <input\n    name="email"\n    [(ngModel)]="model.email"\n    required\n    email\n    #email="ngModel"\n  />\n  <div *ngIf="email.invalid && email.touched">Invalid email</div>\n\n  <input\n    name="password"\n    type="password"\n    [(ngModel)]="model.password"\n    required minlength="6"\n  />\n  <button type="submit" [disabled]="loginForm.invalid">Login</button>\n</form>\n\n// Component\nmodel = { email: "", password: "" };\nonSubmit(form: NgForm) {\n  console.log(form.value);\n}</code></pre>',
+      },
+      {
+        q: "How do Reactive Forms work?",
+        a: '<b><u>Reactive Forms</u></b> use <b>FormGroup</b>, <b>FormControl</b>, and <b>FormBuilder</b> in the component class.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Import ReactiveFormsModule\nimports: [ReactiveFormsModule]\n\n// Component\nexport class LoginComponent {\n  form = new FormGroup({\n    email: new FormControl("", [Validators.required, Validators.email]),\n    password: new FormControl("", [Validators.required, Validators.minLength(6)])\n  });\n\n  // OR using FormBuilder (shorter)\n  constructor(private fb: FormBuilder) {}\n\n  form = this.fb.group({\n    email:    ["", [Validators.required, Validators.email]],\n    password: ["", [Validators.required, Validators.minLength(6)]]\n  });\n\n  onSubmit() {\n    if (this.form.valid) {\n      console.log(this.form.value);  // { email, password }\n    }\n  }\n\n  get email() { return this.form.get("email"); }  // Getter for template\n}\n\n// Template\n<form [formGroup]="form" (ngSubmit)="onSubmit()">\n  <input formControlName="email" />\n  <div *ngIf="email?.hasError(\'email\')">Invalid email format</div>\n  <input formControlName="password" type="password" />\n  <button [disabled]="form.invalid">Login</button>\n</form></code></pre>',
+      },
+      {
+        q: "How do you create Custom Validators in Angular?",
+        a: '<b><u>Custom Validators</u></b> are functions that return <b>null</b> (valid) or a <b>ValidationErrors object</b> (invalid).<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Custom Validator Function\nfunction noSpaceValidator(control: AbstractControl): ValidationErrors | null {\n  const hasSpace = (control.value as string).includes(" ");\n  return hasSpace ? { noSpace: true } : null;\n}\n\n// Async Validator (checks server)\nfunction usernameExistsValidator(userService: UserService): AsyncValidatorFn {\n  return (control: AbstractControl): Observable<ValidationErrors | null> => {\n    return userService.checkUsername(control.value).pipe(\n      map(exists => (exists ? { usernameTaken: true } : null))\n    );\n  };\n}\n\n// Cross-field Validator (password match)\nfunction passwordMatchValidator(group: FormGroup): ValidationErrors | null {\n  const pass = group.get("password")?.value;\n  const confirm = group.get("confirmPassword")?.value;\n  return pass === confirm ? null : { mismatch: true };\n}\n\n// Usage\nform = this.fb.group({\n  username: ["", [Validators.required, noSpaceValidator]],\n  password: ["", Validators.required],\n  confirmPassword: [""]\n}, { validators: passwordMatchValidator });</code></pre>',
+      },
+    ],
+  },
+  {
+    title: "HTTP Client & Observables",
+    questions: [
+      {
+        q: "How do you use HttpClient in Angular?",
+        a: '<b><u>HttpClient</u></b> is Angular\'s built-in service for making <u>HTTP requests</u>. It returns <b>Observables</b>.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// app.module.ts\nimports: [HttpClientModule]\n\n// Service\n@Injectable({ providedIn: "root" })\nexport class UserService {\n  private apiUrl = "https://api.example.com/users";\n\n  constructor(private http: HttpClient) {}\n\n  getUsers(): Observable<User[]> {\n    return this.http.get<User[]>(this.apiUrl);\n  }\n\n  getUserById(id: number): Observable<User> {\n    return this.http.get<User>(`${this.apiUrl}/${id}`);\n  }\n\n  createUser(user: User): Observable<User> {\n    return this.http.post<User>(this.apiUrl, user);\n  }\n\n  updateUser(id: number, user: Partial<User>): Observable<User> {\n    return this.http.put<User>(`${this.apiUrl}/${id}`, user);\n  }\n\n  deleteUser(id: number): Observable<void> {\n    return this.http.delete<void>(`${this.apiUrl}/${id}`);\n  }\n}\n\n// Component\nngOnInit() {\n  this.userService.getUsers().subscribe({\n    next: (users) => this.users = users,\n    error: (err) => console.error(err),\n    complete: () => console.log("Done")\n  });\n}</code></pre>',
+      },
+      {
+        q: "What are HTTP Interceptors?",
+        a: '<b><u>HTTP Interceptors</u></b> intercept and <u>transform HTTP requests/responses</u> globally — useful for adding auth headers, logging, and error handling.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>@Injectable()\nexport class AuthInterceptor implements HttpInterceptor {\n  constructor(private auth: AuthService) {}\n\n  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {\n    const token = this.auth.getToken();\n\n    // Clone and add Authorization header\n    const authReq = req.clone({\n      headers: req.headers.set("Authorization", `Bearer ${token}`)\n    });\n\n    return next.handle(authReq).pipe(\n      catchError((error: HttpErrorResponse) => {\n        if (error.status === 401) {\n          this.auth.logout();\n        }\n        return throwError(() => error);\n      })\n    );\n  }\n}\n\n// Register in AppModule\nproviders: [\n  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }\n]</code></pre>',
+      },
+    ],
+  },
+  {
+    title: "RxJS & Observables",
+    questions: [
+      {
+        q: "What is RxJS? Observable vs Promise?",
+        a: "<b><u>RxJS</u></b> (Reactive Extensions for JS) is a library for <u>reactive async programming</u> using <b>Observables</b>.<br/><br/><b>Observable vs Promise:</b><br/>• Observable → <u>multiple values</u> over time, lazy (starts on subscribe), <u>cancellable</u>, many operators<br/>• Promise → <u>single value</u>, eager (starts immediately), <u>not cancellable</u><br/><br/>Angular uses Observables (from HttpClient, Router, Forms) due to their power and composability.",
+      },
+      {
+        q: "What are the most important RxJS operators?",
+        a: '<b><u>Transformation operators:</u></b><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// map — transform each value\nusers$.pipe(map(users => users.length))\n\n// switchMap — cancel previous, switch to new (e.g., search)\nsearch$.pipe(\n  debounceTime(300),\n  distinctUntilChanged(),\n  switchMap(term => this.api.search(term))\n)\n\n// mergeMap — run all in parallel\nuserIds$.pipe(mergeMap(id => this.api.getUser(id)))\n\n// concatMap — run in order, one at a time\nuploads$.pipe(concatMap(file => this.api.upload(file)))\n\n// forkJoin — wait for all to complete (like Promise.all)\nforkJoin([\n  this.http.get("/users"),\n  this.http.get("/posts")\n]).subscribe(([users, posts]) => {})\n\n// combineLatest — emit when any source emits\ncombineLatest([filter$, sort$]).subscribe(([filter, sort]) => {\n  this.loadData(filter, sort);\n})\n\n// catchError — handle errors\nthis.http.get("/api").pipe(\n  catchError(err => of([]))  // Return empty array on error\n)\n\n// takeUntil — unsubscribe on signal\nthis.data$.pipe(\n  takeUntil(this.destroy$)  // Unsubscribe when component destroys\n).subscribe()</code></pre>',
+      },
+      {
+        q: "What is Subject, BehaviorSubject, ReplaySubject?",
+        a: '<b><u>Subject</u></b> → Observable that is also an Observer. <u>Multicasts</u> to multiple subscribers. No initial value. Late subscribers miss past values.<br/><b><u>BehaviorSubject</u></b> → Requires <u>initial value</u>. Late subscribers get the <u>last emitted value</u>. Most commonly used for state.<br/><b><u>ReplaySubject</u></b> → <u>Replays N past values</u> to new subscribers.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Subject\nconst subject = new Subject<number>();\nsubject.subscribe(v => console.log("A:", v));\nsubject.next(1);  // A: 1\nsubject.next(2);  // A: 2\nsubject.subscribe(v => console.log("B:", v)); // B misses 1 and 2\nsubject.next(3);  // A: 3, B: 3\n\n// BehaviorSubject — state management\nconst user$ = new BehaviorSubject<User | null>(null);\nuser$.next({ name: "Alice" });\nuser$.subscribe(u => console.log(u));  // Gets { name: "Alice" } immediately\nconsole.log(user$.value);              // Synchronous access to current value\n\n// ReplaySubject\nconst replay$ = new ReplaySubject<number>(2);  // Remembers last 2 values\nreplay$.next(1);\nreplay$.next(2);\nreplay$.next(3);\nreplay$.subscribe(v => console.log(v));  // 2, 3 (last 2)</code></pre>',
+      },
+      {
+        q: "What is Promise? When to use Promise vs Subscribe (Observable)?",
+        a: '<b><u>Promise</u></b> → Handles a <u>single async value</u>. Eager (executes immediately). Not cancellable.<br/><b><u>Observable</u></b> → Handles <u>multiple values over time</u>. Lazy (executes on subscribe). Cancellable. Has operators.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Promise — single value, eager\nconst promise = fetch("/api/user").then(res => res.json());\npromise.then(user => console.log(user));  // Executes immediately\n\n// Observable — multiple values, lazy\nconst obs$ = this.http.get("/api/user");\nobs$.subscribe(user => console.log(user));  // Executes on subscribe\n\n// When to use Promise:\n// • One-time async operations (file read, single API call)\n// • Using async/await syntax\n// • Third-party libs returning Promises\n\nawait lastValueFrom(this.http.get("/api"));  // Convert Observable to Promise\n\n// When to use Observable:\n// • Streams of data (WebSocket, user events)\n// • Need to cancel requests\n// • Need operators (debounce, retry, combine)\n// • Angular HttpClient, Router, Forms\n\n// Cancel example\nconst sub = this.http.get("/api").subscribe();\nsub.unsubscribe();  // Cancels the HTTP request</code></pre>',
+      },
+      {
+        q: "When should you unsubscribe from Observables?",
+        a: '<b><u>Unsubscribe</u></b> when the Observable is <u>long-lived</u> and can emit after component destruction. Failing to do so causes <b>memory leaks</b>.<br/><br/><b>MUST unsubscribe:</b><br/>• <u>interval()</u>, <u>timer()</u> — infinite streams<br/>• <u>fromEvent()</u> — DOM events<br/>• <u>BehaviorSubject</u> / <u>Subject</u> subscriptions<br/>• <u>Router events</u>, <u>ActivatedRoute params</u> (in some cases)<br/>• <u>Store selects</u> (NgRx, etc.)<br/><br/><b>NO need to unsubscribe:</b><br/>• <u>HttpClient</u> — completes after response<br/>• <u>async pipe</u> — auto-unsubscribes<br/>• <u>take(1)</u>, <u>first()</u> — completes after first value<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Best practices\n// 1. async pipe (auto-unsubscribes)\n{{ data$ | async }}\n\n// 2. takeUntilDestroyed (Angular 16+)\nthis.data$.pipe(takeUntilDestroyed()).subscribe();\n\n// 3. take(1) for one-time reads\nthis.route.params.pipe(take(1)).subscribe();\n\n// 4. DestroyRef (Angular 16+)\nconst destroyRef = inject(DestroyRef);\ndestroyRef.onDestroy(() => subscription.unsubscribe());</code></pre>',
+      },
+    ],
+  },
+  {
+    title: "Angular 16+ — New Features",
+    questions: [
+      {
+        q: "What are Signals in Angular 16?",
+        a: '<b><u>Signals</u></b> are Angular 16\'s new <u>reactive primitive</u> for fine-grained reactivity. A signal holds a value and <u>notifies consumers when it changes</u> — simpler than RxJS for local state.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>import { signal, computed, effect } from "@angular/core";\n\nexport class CounterComponent {\n  // signal — writable reactive value\n  count = signal(0);\n\n  // computed — derived signal (read-only, auto-updates)\n  doubled = computed(() => this.count() * 2);\n\n  increment() {\n    this.count.update(v => v + 1);  // Update with function\n    // or\n    this.count.set(10);             // Set directly\n  }\n\n  constructor() {\n    // effect — runs side effects when signals change\n    effect(() => {\n      console.log("Count changed:", this.count());\n    });\n  }\n}\n\n// Template - signals are functions, call them with ()\n<p>Count: {{ count() }}</p>\n<p>Doubled: {{ doubled() }}</p></code></pre>',
+      },
+      {
+        q: "What are Standalone Components in Angular?",
+        a: '<b><u>Standalone Components</u></b> (stable in Angular 15, enhanced in 16) work <u>without NgModule</u>. They directly import their own dependencies.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>@Component({\n  selector: "app-home",\n  standalone: true,           // No NgModule needed\n  imports: [\n    CommonModule,\n    RouterModule,\n    FormsModule,\n    UserCardComponent          // Directly import other standalone components\n  ],\n  template: `\n    <h1>Home</h1>\n    <input [(ngModel)]="search" />\n    <app-user-card *ngFor="let u of users" [user]="u" />\n  `\n})\nexport class HomeComponent {\n  search = "";\n}\n\n// Bootstrap with standalone (no AppModule)\n// main.ts\nbootstrapApplication(AppComponent, {\n  providers: [\n    provideRouter(routes),\n    provideHttpClient()\n  ]\n});</code></pre>',
+      },
+      {
+        q: "What are required() inputs in Angular 16?",
+        a: '<b><u>Required inputs</u></b> — Angular 16 introduced <b>input.required()</b> as part of the Signals API, and the <b>required</b> flag for @Input to enforce that a property <u>must be provided</u> by the parent at compile time.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Angular 16 — required @Input\n@Component({ selector: "app-user-card", standalone: true, template: "" })\nexport class UserCardComponent {\n  @Input({ required: true }) user!: User;  // Compile error if not passed\n}\n\n// Usage — TypeScript will error if [user] is not bound\n<app-user-card [user]="selectedUser" />\n<app-user-card />  // ERROR: Required input "user" not provided</code></pre>',
+      },
+      {
+        q: "What is the inject() function in Angular?",
+        a: '<b><u>inject()</u></b> is a function-based alternative to constructor DI. It can be used in <u>standalone functions, guards, interceptors, and component constructors</u>.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>import { inject } from "@angular/core";\n\n// In a component\nexport class UserComponent {\n  // Instead of constructor injection:\n  private userService = inject(UserService);\n  private router      = inject(Router);\n  private route       = inject(ActivatedRoute);\n\n  // No constructor needed!\n  userId = this.route.snapshot.paramMap.get("id");\n}\n\n// In functional guards\nexport const authGuard: CanActivateFn = () => {\n  const auth   = inject(AuthService);\n  const router = inject(Router);\n  return auth.isLoggedIn() ? true : router.createUrlTree(["/login"]);\n};\n\n// In functional interceptors\nexport const authInterceptor: HttpInterceptorFn = (req, next) => {\n  const token = inject(AuthService).getToken();\n  return next(req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }));\n};</code></pre>',
+      },
+      {
+        q: "What are the new features in Angular 17/18 (Latest)?",
+        a: "<b><u>Angular 17 (Nov 2023)</u></b>:<br/>• <b>New control flow syntax</b> — @if, @for, @switch (replaces *ngIf, *ngFor)<br/>• <b>Deferrable views</b> — @defer for lazy loading parts of template<br/>• <b>Improved SSR</b> with hydration<br/>• <b>New Angular.dev</b> documentation site<br/>• <b>Vite + esbuild</b> as default build system<br/><br/><b><u>Angular 18 (May 2024)</u></b>:<br/>• <b>Zoneless change detection</b> (experimental)<br/>• <b>Signal-based inputs</b> — input(), output(), model()<br/>• <b>Route redirects with functions</b><br/>• <b>Improved Material 3</b> components<br/><br/><pre class=\"bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm\"><code>// Angular 17+ control flow\n@if (isLoggedIn) {\n  <p>Welcome back!</p>\n} @else {\n  <p>Please login</p>\n}\n\n@for (user of users; track user.id) {\n  <li>{{ user.name }}</li>\n} @empty {\n  <li>No users found</li>\n}\n\n// Deferrable views — lazy load parts of template\n@defer (on viewport) {\n  <app-heavy-component />\n} @loading {\n  <p>Loading...</p>\n}\n\n// Angular 18 — Signal inputs\n@Component({ ... })\nexport class UserCard {\n  name = input<string>();           // Optional input signal\n  id = input.required<number>();    // Required input signal\n  deleted = output<void>();         // Output signal\n  \n  // model() for two-way binding\n  value = model<string>('');\n}</code></pre>",
+      },
+    ],
+  },
+  {
+    title: "Performance & Best Practices",
+    questions: [
+      {
+        q: "How do you optimize Angular app performance?",
+        a: "<b>1. <u>OnPush Change Detection</u></b> — Skip change detection for unchanged components.<br/><b>2. <u>Lazy Loading</u></b> — Load modules/components only when needed.<br/><b>3. <u>trackBy</u> with *ngFor</b> — Prevent full list re-render on data change.<br/><b>4. <u>Async pipe</u></b> — Auto-unsubscribe, avoids memory leaks.<br/><b>5. <u>Virtual Scrolling</u></b> (CDK) — Render only visible list items.<br/><b>6. <u>Pure Pipes</u></b> — Run only when input reference changes.<br/><b>7. <u>AOT Compilation</u></b> — Compile templates at build time.<br/><b>8. <u>Signals</u></b> (Angular 16) — Fine-grained reactivity without zone.js overhead.",
+      },
+      {
+        q: "What is trackBy and why is it needed?",
+        a: '<b><u>trackBy</u></b> tells Angular <u>how to identify list items</u> uniquely. Without it, Angular destroys and recreates all DOM nodes when the array changes. With it, only changed items are updated.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Without trackBy - all DOM nodes recreated on ANY change (bad for large lists)\n<li *ngFor="let user of users">{{ user.name }}</li>\n\n// With trackBy - only changed items update\n<li *ngFor="let user of users; trackBy: trackByUserId">{{ user.name }}</li>\n\n// Component\ntrackByUserId(index: number, user: User): number {\n  return user.id;  // Unique identifier\n}</code></pre>',
+      },
+      {
+        q: "How do you handle memory leaks (unsubscribe)?",
+        a: '<b><u>Memory leaks</u></b> happen when subscriptions to long-lived Observables are never cleaned up. Common patterns to fix:<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// 1. async pipe (best — auto unsubscribes)\n<li *ngFor="let u of users$ | async">{{ u.name }}</li>\n\n// 2. takeUntilDestroyed (Angular 16 — cleanest manual option)\nexport class MyComponent {\n  private destroyRef = inject(DestroyRef);\n\n  ngOnInit() {\n    this.data$.pipe(\n      takeUntilDestroyed(this.destroyRef)\n    ).subscribe();\n  }\n}\n\n// 3. takeUntil + Subject pattern (pre-Angular 16)\nprivate destroy$ = new Subject<void>();\n\nngOnInit() {\n  this.data$.pipe(takeUntil(this.destroy$)).subscribe();\n}\n\nngOnDestroy() {\n  this.destroy$.next();\n  this.destroy$.complete();\n}\n\n// 4. Manual unsubscribe\nprivate sub!: Subscription;\nngOnInit()    { this.sub = this.data$.subscribe(); }\nngOnDestroy() { this.sub.unsubscribe(); }</code></pre>',
+      },
+      {
+        q: "What is a Memory Leak in Angular?",
+        a: "<b><u>Memory Leak</u></b> occurs when the application <u>allocates memory but fails to release it</u> when no longer needed — causing increasing memory usage over time.<br/><br/><b>Common causes in Angular:</b><br/>• <u>Unsubscribed Observables</u> — interval(), fromEvent(), Subjects<br/>• <u>Event listeners</u> not removed in ngOnDestroy<br/>• <u>setInterval/setTimeout</u> not cleared<br/>• <u>Closures</u> holding references to destroyed components<br/>• <u>Detached DOM nodes</u> still referenced in code<br/><br/><b>How to detect:</b><br/>• Chrome DevTools → Memory tab → Heap snapshots<br/>• Look for growing memory in Performance monitor<br/>• Angular DevTools for component inspection<br/><br/><b>Prevention:</b><br/>• Always use <b>async pipe</b> when possible<br/>• <b>takeUntilDestroyed()</b> for subscriptions<br/>• Clear timers in <b>ngOnDestroy</b><br/>• Remove event listeners in <b>ngOnDestroy</b>",
+      },
+    ],
+  },
+  {
+    title: "TypeScript in Angular",
+    questions: [
+      {
+        q: "Does TypeScript change types dynamically?",
+        a: '<b>No.</b> TypeScript is <b><u>statically typed</u></b> — types are checked at <u>compile time</u>, not runtime.<br/><br/>At runtime, TypeScript compiles to plain JavaScript, which <u>IS dynamically typed</u>. TypeScript\'s types are completely <u>erased</u> during compilation.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// TypeScript (compile time)\nlet name: string = "Alice";\nname = 123;  // ❌ Compile ERROR: Type \'number\' not assignable to \'string\'\n\n// After compilation → JavaScript (runtime)\nlet name = "Alice";\nname = 123;  // ✅ No error at runtime — types are gone\n\n// Type assertions don\'t change runtime behavior\nconst input = document.getElementById("name") as HTMLInputElement;\n// At runtime, this is just: document.getElementById("name")\n\n// \'any\' opts out of type checking\nlet data: any = "hello";\ndata = 42;       // No error\ndata = { x: 1 }; // No error</code></pre>',
+      },
+      {
+        q: "What are the advantages of using TypeScript?",
+        a: '<b>1. <u>Static Type Checking</u></b> — Catch errors at compile time, not runtime<br/><b>2. <u>Better IDE Support</u></b> — IntelliSense, autocomplete, refactoring<br/><b>3. <u>Self-Documenting Code</u></b> — Types serve as documentation<br/><b>4. <u>Easier Refactoring</u></b> — Rename symbols safely across codebase<br/><b>5. <u>Enhanced OOP</u></b> — Interfaces, generics, access modifiers, decorators<br/><b>6. <u>ES6+ Features</u></b> — Use modern JS features, transpile to older targets<br/><b>7. <u>Required for Angular</u></b> — Decorators, DI, and tooling depend on it<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Interface — define contracts\ninterface User {\n  id: number;\n  name: string;\n  email?: string;  // Optional\n}\n\n// Generics — reusable type-safe code\nfunction getFirst<T>(arr: T[]): T | undefined {\n  return arr[0];\n}\nconst num = getFirst([1, 2, 3]);     // type: number\nconst str = getFirst(["a", "b"]);    // type: string\n\n// Union types\ntype Status = "pending" | "approved" | "rejected";\n\n// Access modifiers\nclass UserService {\n  private apiUrl = "/api"; // Only accessible within class\n  protected http: HttpClient;\n  public getUsers() { }\n}</code></pre>',
+      },
+    ],
+  },
+];
 ---
 
 <Layout>
-  <div class="min-h-screen" style="background: linear-gradient(to bottom right, #1f1472, #37147d, #53199e);">
-    <!-- Navigation -->
-    <nav class="bg-black/20 backdrop-blur-md sticky top-0 z-50 border-b border-white/10">
-      <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="/" class="text-white text-2xl font-bold">Interview Prep</a>
-        <a href="/" class="text-gray-300 hover:text-white transition">← Back</a>
-      </div>
-    </nav>
-
+  <div
+    class="min-h-screen"
+    style="background: linear-gradient(to bottom right, #1f1472, #37147d, #53199e);"
+  >
     <!-- Main Content -->
     <div class="max-w-6xl mx-auto px-6 py-12">
       <div class="mb-12">
-        <h1 class="text-5xl font-bold text-white mb-4">Angular</h1>
-        <p class="text-gray-300 text-lg">Angular framework, components, services, and RxJS</p>
+        <h1 class="text-5xl font-bold text-white mb-4">Angular 16</h1>
+        <p class="text-gray-300 text-lg">
+          Angular framework — from fundamentals to advanced (Signals, Standalone
+          Components, RxJS & more)
+        </p>
       </div>
 
-      <!-- Interview Questions Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="bg-white/10 border border-white/20 rounded-lg p-6 hover:bg-white/20 transition backdrop-blur-sm">
-          <h3 class="text-xl font-semibold text-white mb-3">Question 1</h3>
-          <p class="text-gray-300">Add your Angular interview questions here</p>
-        </div>
-
-        <div class="bg-white/10 border border-white/20 rounded-lg p-6 hover:bg-white/20 transition backdrop-blur-sm">
-          <h3 class="text-xl font-semibold text-white mb-3">Question 2</h3>
-          <p class="text-gray-300">Add your Angular interview questions here</p>
-        </div>
-
-        <div class="bg-white/10 border border-white/20 rounded-lg p-6 hover:bg-white/20 transition backdrop-blur-sm">
-          <h3 class="text-xl font-semibold text-white mb-3">Question 3</h3>
-          <p class="text-gray-300">Add your Angular interview questions here</p>
-        </div>
-
-        <div class="bg-white/10 border border-white/20 rounded-lg p-6 hover:bg-white/20 transition backdrop-blur-sm">
-          <h3 class="text-xl font-semibold text-white mb-3">Question 4</h3>
-          <p class="text-gray-300">Add your Angular interview questions here</p>
-        </div>
+      <div class="space-y-8">
+        {
+          topics.map((topic) => (
+            <div class="bg-white backdrop-blur-sm rounded-xl border border-purple-100 overflow-hidden shadow-sm">
+              <div class="bg-gradient-to-r from-purple-50 to-blue-50 px-6 py-4 border-b border-gray-200">
+                <h2 class="text-xl font-semibold">{topic.title}</h2>
+              </div>
+              <div class="divide-y divide-gray-100">
+                {topic.questions.map((qa) => (
+                  <div class="p-6">
+                    <h3 class="text-purple-700 font-medium mb-3 flex items-start gap-2">
+                      <span class="text-purple-600 mt-1">Q:</span>
+                      {qa.q}
+                    </h3>
+                    <p class="text-gray-700 pl-6">
+                      <span class="text-green-600 font-medium">A:</span>{" "}
+                      <span set:html={qa.a} />
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        }
       </div>
     </div>
   </div>
