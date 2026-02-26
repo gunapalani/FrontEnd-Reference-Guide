@@ -40,23 +40,19 @@ const topics = [
       },
       {
         q: "What is Data Binding in Angular?",
-        a: '<b><u>Data Binding</u></b> is the synchronization of data between component and template. Angular supports 4 types:<br/><br/><b>1. Interpolation</b> {{ }} — Component → Template (one-way)<br/><b>2. Property Binding</b> [ ] — Component → Template (one-way)<br/><b>3. Event Binding</b> ( ) — Template → Component (one-way)<br/><b>4. Two-way Binding</b> [( )] — Both directions using ngModel<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// 1. Interpolation\n<h1>{{ title }}</h1>\n\n// 2. Property Binding\n<img [src]="imageUrl" />\n<button [disabled]="isLoading">Submit</button>\n\n// 3. Event Binding\n<button (click)="save()">Save</button>\n<input (input)="onInput($event)" />\n\n// 4. Two-way Binding\n<input [(ngModel)]="username" />\n// Requires FormsModule</code></pre>',
+        a: '<b><u>Data Binding</u></b> is the synchronization of data between component and template. Angular supports <b>4 types</b>:<br/><br/><b>━━━ 1. INTERPOLATION {{ }} ━━━</b><br/><b>Direction:</b> Component → Template (one-way)<br/><b>Purpose:</b> Display component data as text<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Component\nname = "Alice";\n\n// Template\n&lt;h1&gt;{{ name }}&lt;/h1&gt;           // Alice\n&lt;p&gt;{{ 10 + 5 }}&lt;/p&gt;            // 15\n&lt;p&gt;{{ name.toUpperCase() }}&lt;/p&gt; // ALICE</code></pre><br/><b>━━━ 2. PROPERTY BINDING [ ] ━━━</b><br/><b>Direction:</b> Component → Template (one-way)<br/><b>Purpose:</b> Bind data to HTML properties<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Component\nimageUrl = "photo.jpg";\nisDisabled = true;\n\n// Template\n&lt;img [src]="imageUrl" /&gt;\n&lt;button [disabled]="isDisabled"&gt;Save&lt;/button&gt;\n&lt;div [ngClass]="{ active: isActive }"&gt;Text&lt;/div&gt;</code></pre><br/><b>━━━ 3. EVENT BINDING ( ) ━━━</b><br/><b>Direction:</b> Template → Component (one-way)<br/><b>Purpose:</b> Listen to user events<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Component\ncount = 0;\nincrement() { this.count++; }\n\n// Template\n&lt;button (click)="increment()"&gt;Click&lt;/button&gt;\n&lt;input (keyup.enter)="save()" /&gt;\n&lt;input (blur)="onBlur()" /&gt;</code></pre><br/><b>━━━ 4. TWO-WAY BINDING [( )] ━━━</b><br/><b>Direction:</b> Component ↔ Template (both directions)<br/><b>Purpose:</b> Auto-sync between component and template<br/><b>Requires:</b> FormsModule<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Component\nname = "John";\n\n// Template\n&lt;input [(ngModel)]="name" /&gt;\n&lt;p&gt;Name: {{ name }}&lt;/p&gt;  // Updates instantly</code></pre>',
       },
       {
         q: "What are @Input() and @Output() decorators?",
-        a: '<b><u>@Input()</u></b> → Passes data <u>from parent to child</u> component.<br/><b><u>@Output()</u></b> → Emits events <u>from child to parent</u> using EventEmitter.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Child Component\n@Component({ selector: "app-card", template: `\n  <div>{{ title }}</div>\n  <button (click)="onDelete()">Delete</button>\n`})\nexport class CardComponent {\n  @Input() title: string = "";              // Receives from parent\n  @Output() deleted = new EventEmitter();   // Emits to parent\n\n  onDelete() {\n    this.deleted.emit(this.title);\n  }\n}\n\n// Parent Template\n<app-card\n  [title]="item.name"\n  (deleted)="handleDelete($event)">\n</app-card></code></pre>',
+        a: '<b><u>@Input()</u></b> → Passes data from parent to child.<br/><b><u>@Output()</u></b> → Emits events from child to parent.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Child\nexport class CardComponent {\n  @Input() title: string = "";\n  @Output() deleted = new EventEmitter();\n\n  onDelete() {\n    this.deleted.emit(this.title);\n  }\n}\n\n// Parent Template\n&lt;app-card [title]="name" (deleted)="onDelete($event)"&gt;\n&lt;/app-card&gt;</code></pre>',
       },
       {
         q: "What is ViewChild and ContentChild?",
-        a: '<b><u>@ViewChild</u></b> → Accesses a <u>child component/element in the same template</u>.<br/><b><u>@ContentChild</u></b> → Accesses a <u>projected child (via ng-content)</u>.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>@Component({\n  template: `<app-child #childRef></app-child>`\n})\nexport class ParentComponent implements AfterViewInit {\n  @ViewChild("childRef") child!: ChildComponent;\n\n  ngAfterViewInit() {\n    this.child.doSomething();  // Call child method\n  }\n}</code></pre>',
+        a: '<b><u>@ViewChild</u></b> → Access child in template.<br/><b><u>@ContentChild</u></b> → Access projected child (ng-content).<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// ViewChild Example\n@Component({\n  template: `&lt;input #nameInput /&gt;`\n})\nexport class MyComponent implements AfterViewInit {\n  @ViewChild("nameInput") input!: HTMLInputElement;\n  ngAfterViewInit() {\n    this.input.focus();\n  }\n}\n\n// ContentChild Example\n@Component({\n  template: `&lt;ng-content&gt;&lt;/ng-content&gt;`\n})\nexport class CardComponent implements AfterContentInit {\n  @ContentChild(TitleComponent) title!: TitleComponent;\n  ngAfterContentInit() {\n    console.log(this.title);\n  }\n}</code></pre>',
       },
       {
         q: "What is ng-content (Content Projection)?",
-        a: '<b><u>ng-content</u></b> allows a component to <u>accept and project external HTML</u> into its template — similar to slots in Web Components.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Card Component Template\n<div class="card">\n  <div class="header">\n    <ng-content select="[card-header]"></ng-content>\n  </div>\n  <div class="body">\n    <ng-content></ng-content>  <!-- Default slot -->\n  </div>\n</div>\n\n// Usage in parent\n<app-card>\n  <h2 card-header>My Title</h2>\n  <p>Card body content</p>\n</app-card></code></pre>',
-      },
-      {
-        q: "What are Component Lifecycle Hooks?",
-        a: '<b><u>Lifecycle hooks</u></b> let you tap into key moments of a component\'s life:<br/><br/><b>ngOnChanges</b> → Called when <u>@Input() values change</u><br/><b>ngOnInit</b> → Called once after <u>first ngOnChanges</u> (use for initialization)<br/><b>ngDoCheck</b> → Called during <u>every change detection run</u><br/><b>ngAfterContentInit</b> → After <u>ng-content projected</u><br/><b>ngAfterViewInit</b> → After <u>component view initialized</u><br/><b>ngOnDestroy</b> → Before <u>component is destroyed</u> (cleanup)<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>export class MyComponent implements OnInit, OnDestroy {\n  private sub!: Subscription;\n\n  ngOnInit() {\n    // Initialization logic — fetch data, subscribe\n    this.sub = this.userService.getUsers().subscribe();\n  }\n\n  ngOnChanges(changes: SimpleChanges) {\n    console.log("Input changed:", changes);\n  }\n\n  ngOnDestroy() {\n    // Cleanup — unsubscribe to avoid memory leaks\n    this.sub.unsubscribe();\n  }\n}</code></pre>',
+        a: '<b><u>ng-content</u></b> allows a component to accept and display external HTML (like slots).<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Card Component\n&lt;div class="card"&gt;\n  &lt;ng-content&gt;&lt;/ng-content&gt;\n&lt;/div&gt;\n\n// Parent Usage\n&lt;app-card&gt;\n  &lt;h2&gt;My Title&lt;/h2&gt;\n  &lt;p&gt;Card content&lt;/p&gt;\n&lt;/app-card&gt;</code></pre>',
       },
       {
         q: "What is the complete Angular Component Lifecycle?",
@@ -64,7 +60,7 @@ const topics = [
       },
       {
         q: "What is Change Detection in Angular?",
-        a: '<b><u>Change Detection</u></b> is Angular\'s mechanism to <u>sync the component state with the DOM</u>. Angular checks the entire component tree by default (<b>Default strategy</b>).<br/><br/><b><u>ChangeDetectionStrategy.OnPush</u></b> → Only checks when <u>@Input() reference changes</u> or an event fires. Better performance.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>@Component({\n  selector: "app-user",\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  template: `<p>{{ user.name }}</p>`\n})\nexport class UserComponent {\n  @Input() user!: User;  // Only re-renders when user reference changes\n}\n\n// Force check manually if needed\nconstructor(private cdr: ChangeDetectorRef) {}\n\nmanualUpdate() {\n  this.cdr.markForCheck();  // Schedule check\n  // or\n  this.cdr.detectChanges(); // Run check immediately\n}</code></pre>',
+        a: '<b><u>Change Detection</u></b> syncs component state with the DOM. Angular checks the entire tree by default.<br/><br/><b><u>OnPush Strategy</u></b> → Only checks when @Input() reference changes or events fire (better performance).<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>@Component({\n  changeDetection: ChangeDetectionStrategy.OnPush\n})\nexport class UserComponent {\n  @Input() user!: User;  // Re-renders when reference changes\n}</code></pre>',
       },
     ],
   },
@@ -77,11 +73,11 @@ const topics = [
       },
       {
         q: "What are Structural Directives?",
-        a: '<b><u>Structural Directives</u></b> modify the DOM structure using the <b>*</b> prefix (syntactic sugar for ng-template).<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// *ngIf\n<div *ngIf="isLoggedIn; else loginBlock">\n  Welcome back!\n</div>\n<ng-template #loginBlock><p>Please login</p></ng-template>\n\n// *ngFor\n<ul>\n  <li *ngFor="let user of users; let i = index; trackBy: trackById">\n    {{ i + 1 }}. {{ user.name }}\n  </li>\n</ul>\n\n// *ngSwitch\n<div [ngSwitch]="status">\n  <p *ngSwitchCase="\'active\'">Active</p>\n  <p *ngSwitchCase="\'inactive\'">Inactive</p>\n  <p *ngSwitchDefault>Unknown</p>\n</div></code></pre>',
+        a: '<b><u>Structural Directives</u></b> modify DOM by adding/removing elements using <b>*</b> prefix.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// *ngIf - Show/Hide\n&lt;div *ngIf="isLoggedIn"&gt;Welcome!&lt;/div&gt;\n&lt;div *ngIf="!isLoggedIn"&gt;Please login&lt;/div&gt;\n\n// *ngFor - Loop\n&lt;li *ngFor="let user of users; trackBy: trackById"&gt;\n  {{ user.name }}\n&lt;/li&gt;\n\n// *ngSwitch - Conditional\n&lt;div [ngSwitch]="status"&gt;\n  &lt;p *ngSwitchCase="\'active\'"&gt;Active&lt;/p&gt;\n  &lt;p *ngSwitchDefault&gt;Inactive&lt;/p&gt;\n&lt;/div&gt;</code></pre>',
       },
       {
         q: "What are Attribute Directives? How to build a custom one?",
-        a: '<b><u>Attribute Directives</u></b> change the appearance/behavior of an element without adding/removing it.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Built-in\n<div [ngClass]="{ \'active\': isActive, \'disabled\': !isEnabled }">Text</div>\n<div [ngStyle]="{ color: textColor, fontSize: size + \'px\' }">Text</div>\n\n// Custom Attribute Directive\n@Directive({\n  selector: "[appHighlight]"\n})\nexport class HighlightDirective {\n  @Input() appHighlight = "yellow";\n\n  constructor(private el: ElementRef, private renderer: Renderer2) {}\n\n  @HostListener("mouseenter") onMouseEnter() {\n    this.renderer.setStyle(this.el.nativeElement, "backgroundColor", this.appHighlight);\n  }\n\n  @HostListener("mouseleave") onMouseLeave() {\n    this.renderer.removeStyle(this.el.nativeElement, "backgroundColor");\n  }\n}\n\n// Usage\n<p [appHighlight]="\'lightblue\'">Hover over me!</p></code></pre>',
+        a: '<b><u>Attribute Directives</u></b> change appearance/behavior of elements.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Built-in\n[ngClass]="{ active: isActive }"\n[ngStyle]="{ color: \'red\' }"\n\n// Custom Directive\n@Directive({ selector: "[appHighlight]" })\nexport class HighlightDirective {\n  @Input() appHighlight = "yellow";\n  constructor(private el: ElementRef) {}\n\n  @HostListener("mouseenter")\n  onHover() {\n    this.el.nativeElement.style.backgroundColor = this.appHighlight;\n  }\n\n  @HostListener("mouseleave")\n  onLeave() {\n    this.el.nativeElement.style.backgroundColor = "";\n  }\n}\n\n// Usage\n&lt;p [appHighlight]="\'blue\'"&gt;Hover me&lt;/p&gt;</code></pre>',
       },
       {
         q: "What are Pipes in Angular?",
@@ -253,7 +249,113 @@ const topics = [
       },
     ],
   },
+  {
+    title: "State Management (NgRx & Context)",
+    questions: [
+      {
+        q: "What is State Management and why do you need it?",
+        a: "<b><u>State Management</u></b> centralizes app state in one immutable store — making it easier to track, debug, and sync data across components.<br/><br/><b>Without state management:</b><br/>• Components pass data via @Input/@Output (prop drilling)<br/>• Multiple sources of truth<br/>• Hard to debug data flow<br/>• Prone to sync issues<br/><br/><b>With state management (NgRx, Akita, etc.):</b><br/>• <u>Single source of truth</u> — one place for all app state<br/>• <u>Predictable</u> — state changes via dispatched actions<br/>• <u>Testable</u> — pure reducers and selectors<br/>• <u>Time-travel debugging</u> — replaying app state<br/>• <u>DevTools integration</u> — track all state changes",
+      },
+      {
+        q: "What is NgRx and how does it work?",
+        a: '<b><u>NgRx</u></b> is Angular\'s official state management library following <b>Redux</b> pattern.<br/><br/><b>Core concepts:</b><br/>• <b>Store</b> — single immutable state tree<br/>• <b>Actions</b> — events describing state changes (LoadUsers, AddUser)<br/>• <b>Reducers</b> — pure functions: (previousState, action) => newState<br/>• <b>Selectors</b> — query state efficiently (memoized)<br/>• <b>Effects</b> — handle side effects (HTTP calls, navigation)<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// 1. Define state shape\ninterface AppState {\n  users: User[];\n  loading: boolean;\n  error: string | null;\n}\n\n// 2. Create actions\nexport const loadUsers = createAction("[Users] Load Users");\nexport const loadUsersSuccess = createAction(\n  "[Users] Load Users Success",\n  props<{ users: User[] }>()\n);\n\n// 3. Create reducer\nconst initialState: AppState = { users: [], loading: false, error: null };\n\nconst usersReducer = createReducer(\n  initialState,\n  on(loadUsers, (state) => ({ ...state, loading: true })),\n  on(loadUsersSuccess, (state, { users }) => ({\n    ...state,\n    users,\n    loading: false\n  }))\n);\n\n// 4. Create effects (handle side effects)\n@Injectable()\nexport class UserEffects {\n  loadUsers$ = createEffect(() =>\n    this.actions$.pipe(\n      ofType(loadUsers),\n      switchMap(() =>\n        this.userService.getUsers().pipe(\n          map((users) => loadUsersSuccess({ users }))\n        )\n      )\n    )\n  );\n\n  constructor(\n    private actions$: Actions,\n    private userService: UserService\n  ) {}\n}\n\n// 5. Use in component\nexport class UserListComponent {\n  users$ = this.store.select(selectUsers);\n\n  constructor(private store: Store) {}\n\n  ngOnInit() {\n    this.store.dispatch(loadUsers());\n  }\n}</code></pre>',
+      },
+      {
+        q: "What is the difference between Reducers and Selectors in NgRx?",
+        a: '<b><u>Reducers</u></b> → <u>Update state</u> based on actions. Pure functions.<br/><b><u>Selectors</u></b> → <u>Read/query state</u> efficiently. Memoized to avoid unnecessary re-renders.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Reducer — updates state\nconst reducer = createReducer(\n  initialState,\n  on(addUser, (state, { user }) => ({ ...state, users: [...state.users, user] }))\n);\n\n// Selector — queries state\nexport const selectUsers = (state: AppState) => state.users;\nexport const selectUserCount = createSelector(\n  selectUsers,\n  (users) => users.length  // memoized — only recalculates when users array changes\n);\n\n// Component\nthis.userCount$ = this.store.select(selectUserCount);</code></pre>',
+      },
+      {
+        q: "What are Effects in NgRx?",
+        a: '<b><u>Effects</u></b> handle <u>side effects</u> triggered by actions — API calls, navigation, logging, etc. Effects dispatch new actions based on results.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>@Injectable()\nexport class TodoEffects {\n  // Effect that returns a new action\n  loadTodos$ = createEffect(() =>\n    this.actions$.pipe(\n      ofType(loadTodos),\n      switchMap(() =>\n        this.api.getTodos().pipe(\n          map((todos) => loadTodosSuccess({ todos })),\n          catchError((err) => of(loadTodosError({ error: err.message })))\n        )\n      )\n    )\n  );\n\n  // Non-dispatching effect (side effect only, no new action)\n  saveTodo$ = createEffect(\n    () =>\n      this.actions$.pipe(\n        ofType(saveTodo),\n        tap(({ todo }) => console.log("Saved:", todo))\n      ),\n    { dispatch: false }  // No action dispatched\n  );\n\n  // Dispatch to navigate on success\n  loginSuccess$ = createEffect(\n    () =>\n      this.actions$.pipe(\n        ofType(loginSuccess),\n        tap(() => this.router.navigate(["/dashboard"]))\n      ),\n    { dispatch: false }\n  );\n\n  constructor(\n    private actions$: Actions,\n    private api: ApiService,\n    private router: Router\n  ) {}\n}</code></pre>',
+      },
+    ],
+  },
+  {
+    title: "Testing in Angular",
+    questions: [
+      {
+        q: "How do you write Unit Tests in Angular?",
+        a: '<b><u>Unit tests</u></b> test individual components, services, and functions using <b>Jasmine</b> and <b>Karma</b>.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>import { ComponentFixture, TestBed } from "@angular/core/testing";\nimport { DebugElement } from "@angular/core";\nimport { By } from "@angular/platform-browser";\nimport { UserComponent } from "./user.component";\nimport { UserService } from "./user.service";\n\ndescribe("UserComponent", () => {\n  let component: UserComponent;\n  let fixture: ComponentFixture<UserComponent>;\n  let userService: jasmine.SpyObj<UserService>;\n\n  beforeEach(async () => {\n    const userServiceSpy = jasmine.createSpyObj("UserService", ["getUser"]);\n\n    await TestBed.configureTestingModule({\n      declarations: [UserComponent],\n      providers: [{ provide: UserService, useValue: userServiceSpy }]\n    }).compileComponents();\n\n    userService = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;\n  });\n\n  beforeEach(() => {\n    fixture = TestBed.createComponent(UserComponent);\n    component = fixture.componentInstance;\n  });\n\n  it("should display user name", () => {\n    const mockUser = { id: 1, name: "John" };\n    userService.getUser.and.returnValue(of(mockUser));\n\n    fixture.detectChanges();  // Trigger ngOnInit\n\n    const element: DebugElement = fixture.debugElement.query(By.css("h1"));\n    expect(element.nativeElement.textContent).toContain("John");\n  });\n\n  it("should call getUser on init", () => {\n    fixture.detectChanges();\n    expect(userService.getUser).toHaveBeenCalled();\n  });\n});\n\nng test</code></pre>',
+      },
+      {
+        q: "What are Jasmine matchers and how to use them?",
+        a: '<b><u>Matchers</u></b> assert expected vs actual values in tests.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Equality\nexpect(value).toBe(5);              // Strict equality (===)\nexpect(obj).toEqual({ id: 1 });     // Deep equality\n\n// Truthiness\nexpect(value).toBeTruthy();\nexpect(value).toBeFalsy();\n\n// Type checks\nexpect(value).toBeNull();\nexpect(value).toBeUndefined();\nexpect(value).toBeDefined();\n\n// Comparisons\nexpect(5).toBeGreaterThan(3);\nexpect(3).toBeLessThan(5);\n\n// Strings\nexpect("hello").toContain("ell");\nexpect("test@example.com").toMatch(/^[^@]+@[^@]+$/);\n\n// Arrays\nexpect([1, 2, 3]).toContain(2);\nexpect([]).toEqual(jasmine.arrayWithExactContents([]));\n\n// Spies\nexpect(spy).toHaveBeenCalled();\nexpect(spy).toHaveBeenCalledWith(arg);\nexpect(spy).toHaveBeenCalledTimes(3);\n\n// Errors\nexpect(() => { throw new Error() }).toThrowError();\nexpect(promise).rejectsWith(Error);</code></pre>',
+      },
+      {
+        q: "What is TestBed in Angular testing?",
+        a: '<b><u>TestBed</u></b> is the Angular testing utility that <u>configures a test module</u> similar to NgModule — provides dependencies, declares components, sets up mocks.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>beforeEach(async () => {\n  // Configure test module\n  await TestBed.configureTestingModule({\n    declarations: [UserComponent],\n    imports: [CommonModule, HttpClientTestingModule],\n    providers: [\n      UserService,\n      { provide: API_URL, useValue: "http://test.com" }  // Mock token\n    ]\n  }).compileComponents();  // Compile templates and CSS\n});\n\n// Get service from TestBed\nconst service = TestBed.inject(UserService);\nconst httpMock = TestBed.inject(HttpTestingController);\n\n// Create component (isolated from TestBed)\nfixture = TestBed.createComponent(UserComponent);\ncomponent = fixture.componentInstance;</code></pre>',
+      },
+      {
+        q: "How do you test HTTP calls in Angular?",
+        a: '<b><u>HttpClientTestingModule</u></b> provides <b>HttpTestingController</b> to mock HTTP requests in tests.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>let httpMock: HttpTestingController;\n\nbeforeEach(() => {\n  TestBed.configureTestingModule({\n    imports: [HttpClientTestingModule],\n    providers: [UserService]\n  });\n  httpMock = TestBed.inject(HttpTestingController);\n});\n\nit("should fetch users", () => {\n  const mockUsers = [{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }];\n  const userService = TestBed.inject(UserService);\n\n  userService.getUsers().subscribe((users) => {\n    expect(users).toEqual(mockUsers);\n  });\n\n  // Expect and respond to HTTP request\n  const req = httpMock.expectOne("/api/users");\n  expect(req.request.method).toBe("GET");\n  req.flush(mockUsers);  // Send mock response\n});\n\nafterEach(() => {\n  httpMock.verify();  // Verify no outstanding HTTP requests\n});</code></pre>',
+      },
+    ],
+  },
+  {
+    title: "Security & Best Practices",
+    questions: [
+      {
+        q: "What are the security risks in Angular and how to prevent them?",
+        a: '<b><u>XSS (Cross-Site Scripting)</u></b> → Inject malicious script. Angular sanitizes by default but use <b>bypassSecurityTrustHtml</b> carefully.<br/><b><u>CSRF</u></b> → Forge requests. Angular auto-includes CSRF tokens in HTTP headers.<br/><b><u>Injection attacks</u></b> → SQL, NoSQL. Use parameterized queries.\br/><b><u>Sensitive data exposure</u></b> → Use HTTPS, don\'t store secrets in code.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// ✅ Safe — Angular auto-escapes\n<p>{{ userInput }}</p>\n\n// ❌ Dangerous — can inject HTML/scripts\n<p [innerHTML]="userInput"></p>\n\n// ⚠️ If you must trust HTML, sanitize first\nimport { DomSanitizer } from "@angular/platform-browser";\n\nconstructor(private sanitizer: DomSanitizer) {}\n\ntrustedHtml = this.sanitizer.sanitize(SecurityContext.HTML, unsafeHtml);\n\n// ✅ Safe property binding\n<img [src]="imagePath" />\n\n// ❌ Avoid\n // Can inject javascript: URLs\n\n// CSRF protection — Angular includes X-XSRF-TOKEN automatically\n// Configure CSRF token names if needed:\nproviders: [\n  {\n    provide: HTTP_INTERCEPTORS,\n    useClass: AuthInterceptor\n  }\n]</code></pre>',
+      },
+      {
+        q: "What are Angular Best Practices?",
+        a: "<b>1. <u>Use OnPush Change Detection</u></b> — Better performance<br/><b>2. <u>Use async Pipe</u></b> — Auto-unsubscribe, simpler code<br/><b>3. <u>Lazy Load Modules</u></b> — Reduce initial bundle<br/><b>4. <u>Unsubscribe in ngOnDestroy</u></b> — Prevent memory leaks<br/><b>5. <u>Use Standalone Components</u></b> — No NgModule boilerplate<br/><b>6. <u>Immutable State</u></b> — Use immutable updates (spread operator, immer.js)<br/><b>7. <u>Environment-specific Configs</u></b> — Different API URLs per environment<br/><b>8. <u>Consistent Naming</u></b> — Components: PascalCase, files: kebab-case, observables: $ suffix<br/><b>9. <u>Avoid Direct DOM Access</u></b> — Use Renderer2, ViewChild<br/><b>10. <u>Keep Components Simple</u></b> — Delegation to services, single responsibility",
+      },
+      {
+        q: "What is sanitization in Angular?",
+        a: '<b><u>Sanitization</u></b> removes dangerous code from values before rendering them to prevent XSS attacks. Angular uses <b>DomSanitizer</b>.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>import { DomSanitizer, SafeHtml } from "@angular/platform-browser";\n\nexport class SafeComponent {\n  constructor(private sanitizer: DomSanitizer) {}\n\n  // Sanitize HTML\n  safeHtml: SafeHtml = this.sanitizer.sanitize(\n    SecurityContext.HTML,\n    "<p>Safe content</p>"\n  ) || "";\n\n  // Bypass sanitization (use only if content is trusted)\n  trustedHtml = this.sanitizer.bypassSecurityTrustHtml(\n    "<p>Trusted content</p>"\n  );\n\n  // Template\n  // <div [innerHTML]="safeHtml"></div>\n}\n\n// Security contexts:\n// • HTML — body, div\n// • STYLE — style attribute\n// • SCRIPT — <script> tags\n// • URL — href, src\n// • RESOURCE_URL — <script src>, <link href></code></pre>',
+      },
+    ],
+  },
+  {
+    title: "Error Handling & Debugging",
+    questions: [
+      {
+        q: "How do you handle errors in RxJS Observables?",
+        a: '<b><u>catchError</u></b> catches Observable errors. <b><u>throwError</u></b> converts to error. <b><u>retry</u></b> automatically retries on error.<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Catch and handle error\nthis.http.get("/api/users").pipe(\n  catchError((error: HttpErrorResponse) => {\n    if (error.status === 404) {\n      return of([]);  // Return empty array\n    } else if (error.status === 401) {\n      this.router.navigate(["/login"]);\n      return throwError(() => new Error("Unauthorized"));\n    }\n    return throwError(() => error);\n  })\n).subscribe();\n\n// Retry logic\nthis.http.get("/api/users").pipe(\n  retry(3),  // Retry up to 3 times on error\n  catchError((err) => {\n    console.error("Failed after 3 retries:", err);\n    return of([]);\n  })\n).subscribe();\n\n// Retry with delay/backoff (exponential)\nretryWhen((errors) =>\n  errors.pipe(\n    mergeMap((error, index) =>\n      index < 3 ? timer(Math.pow(2, index) * 1000) : throwError(() => error)\n    )\n  )\n);\n\n// finalize — cleanup regardless of success/error\nthis.http.get("/api").pipe(\n  finalize(() => console.log("Request completed (success or error)"))\n).subscribe();</code></pre>',
+      },
+      {
+        q: "How do you debug Angular applications?",
+        a: '<b>1. <u>Browser DevTools</u></b> → Set breakpoints, step through code, inspect variables<br/><b>2. <u>Angular DevTools (Chrome Extension)</u></b> → Inspect components, debug change detection, view dependency tree<br/><b>3. <u>console.log / debugger</u></b> → Log values, pause execution<br/><b>4. <u>Source Maps</u></b> → Debug TypeScript instead of JavaScript (enabled in dev mode)<br/><b>5. <u>Network tab</u></b> → Monitor HTTP requests, check payloads, latency<br/><b>6. <u>Profiler</u></b> → Record and analyze CPU usage, identify performance bottlenecks<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Debugging tips\n// Use debugger keyword to pause execution\nngOnInit() {\n  debugger;  // Execution pauses here\n  this.loadData();\n}\n\n// Log Objects nicely\nconsole.table(this.users);\nconsole.group("User Data");\nconsole.log("Name:", this.user.name);\nconsole.log("Age:", this.user.age);\nconsole.groupEnd();\n\n// Monitor Observable emissions\nthis.data$.pipe(\n  tap((value) => console.log("Data received:", value))\n).subscribe();</code></pre>',
+      },
+      {
+        q: "What is Error Boundary in Angular?",
+        a: "<b><u>Angular doesn't have native Error Boundary</u></b> like React, but you can create one using <b>ErrorHandler</b>.<br/><br/>Create a global error handler to catch unhandled errors and display them gracefully instead of crashing the app.",
+      },
+    ],
+  },
+  {
+    title: "Advanced Topics",
+    questions: [
+      {
+        q: "What are Decorators in Angular?",
+        a: '<b><u>Decorators</u></b> are functions that <u>modify classes, methods, properties, or parameters</u>. They use <b>@</b> prefix and are called at class definition time.<br/><br/><b>Common decorators:</b><br/>• <b>@Component</b> — Declare component<br/>• <b>@Directive</b> — Declare directive<br/>• <b>@Injectable</b> — Mark as dependency injection service<br/>• <b>@Input/@Output</b> — Component communication<br/>• <b>@ViewChild/@ContentChild</b> — Access DOM elements<br/>• <b>@HostBinding/@HostListener</b> — Host element manipulation<br/>• <b>@NgModule</b> — Declare module<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>// Property decorator\nbool = true;\n\n// Class decorator\n@Component({ /* ... */ })\nexport class MyComponent {}\n\n// Method decorator (rare)\nclass MyClass {\n  @LogCall()  // Custom decorator\n  myMethod() {}\n}\n\n// Parameter decorator\nfunction Validate(target: any, key: string, index: number) {}\n\nclass MyClass {\n  myMethod(@Validate() value: string) {}\n}</code></pre>',
+      },
+      {
+        q: "What is the difference between View Encapsulation modes?",
+        a: '<b><u>View Encapsulation</u></b> controls how component styles are scoped. Angular supports 3 modes:<br/><br/><b>1. ViewEncapsulation.Emulated (default)</b> → Shadow DOM-like behavior (styles scoped via generated attributes)<br/><b>2. ViewEncapsulation.ShadowDom</b> → Uses native Shadow DOM (real encapsulation, not all browsers)<br/><b>3. ViewEncapsulation.None</b> → No encapsulation (styles global)<br/><br/><pre class="bg-gray-800 text-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm"><code>@Component({\n  selector: "app-card",\n  template: `<div class="card">Content</div>`,\n  styles: [`.card { color: blue; }`],\n  encapsulation: ViewEncapsulation.Emulated  // Default\n})\nexport class CardComponent {}\n\n// Generated HTML (Emulated):\n// <div class="card _ngcontent-ng-c1234">Content</div>\n// CSS becomes: .card[_ngcontent-ng-c1234] { color: blue; }\n\n// With ShadowDom:\n// Real Shadow DOM tree, styles completely isolated\n\n// With None:\n// Styles are global, can leak to other components</code></pre>',
+      },
+      {
+        q: "What is Zone.js in Angular?",
+        a: '<b><u>Zone.js</u></b> is a library Angular uses to <u>patch async operations</u> (setTimeout, Promise, events) and <u>trigger change detection</u> automatically.<br/><br/>When async operations complete, Zone.js notifies Angular to run change detection — ensuring the UI updates.<br/><br/><b>Angular 18+ allows "zoneless" apps</b> using Signals for more efficient change detection (experimental).',
+      },
+      {
+        q: "What is Hydration in Angular?",
+        a: "<b><u>Hydration</u></b> (Angular 16) is the process of <u>reusing server-rendered HTML</u> on the client instead of destroying and re-rendering.<br/><br/>Benefits:<br/>• <u>Faster initial load</u> — No white flash<br/>• <u>Better Core Web Vitals</u> — FCP, LCP improve<br/>• <u>SEO friendly</u> — HTML available immediately<br/>• <u>Prevents double rendering</u> — Server HTML + client hydration",
+      },
+      {
+        q: "What is Module Federation in Angular?",
+        a: "<b><u>Module Federation</u></b> (Webpack 5) allows <u>loading separate Angular apps at runtime</u> from different deployments — enabling independent development and deployment of app pieces.<br/><br/>Use case: Micro-frontends — multiple teams work on different features independently.",
+      },
+    ],
+  },
 ];
+
+const totalQuestions = topics.reduce(
+  (sum, topic) => sum + topic.questions.length,
+  0,
+);
 ---
 
 <Layout>
@@ -268,6 +370,11 @@ const topics = [
         <p class="text-gray-300 text-lg">
           Angular framework — from fundamentals to advanced (Signals, Standalone
           Components, RxJS & more)
+        </p>
+        <p class="text-purple-200 text-lg font-semibold mt-4">
+          📚 Total Questions: <span class="text-yellow-300"
+            >{totalQuestions}</span
+          >
         </p>
       </div>
 
